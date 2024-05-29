@@ -1,6 +1,5 @@
 import React from 'react';
-import { BrowserRouter,Routes} from 'react-router-dom';
-import { AppNavigator } from './app';
+import { BrowserRouter} from 'react-router-dom';
 import { AuthNavigator } from './auth';
 
 
