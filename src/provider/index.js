@@ -1,1 +1,1 @@
-export { AuthenticatedUserContext, AuthenticatedUserProvider as default } from './auth'
+export { AuthenticatedUserContext, AuthenticatedUserProvider } from './Provider'
