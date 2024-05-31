@@ -1,12 +1,12 @@
 import { Navigator } from "./navigation";
+import { AuthenticatedUserProvider } from "./provider";
 
 
 function App() {
   return (
-<div>
+    <AuthenticatedUserProvider>
 <Navigator/>
-</div>
-   
+</AuthenticatedUserProvider>
   );
 }
 

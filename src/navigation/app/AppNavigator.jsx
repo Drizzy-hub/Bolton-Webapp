@@ -1,11 +1,8 @@
-import React from 'react';
+import { Dashboard } from '../../pages/app';
 
-const AppNavigator = () => {
-  return (
-    <div>
-      
-    </div>
-  );
-};
+const AppNavigator =  [
+  { path: '/', name: 'Home', Component: Dashboard },
+]
+
 
 export default AppNavigator;

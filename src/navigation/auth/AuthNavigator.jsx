@@ -1,15 +1,9 @@
-import React from 'react';
-import { Route, Routes } from 'react-router-dom';
-import { Login, NoPage, Signup } from '../../pages';
 
-const AuthNavigator = () => {
-  return (
-    <Routes>
-    <Route index path="login" element={<Login/>} />
-      <Route path="signup" element={<Signup/>} />
-      <Route path="*" element={<NoPage />} />
-  </Routes>
-  );
-};
+import { Login, Signup } from '../../pages';
 
+const AuthNavigator =  [
+  { path: '/login', name: 'Login', Component: Login },
+  { path: '/signup', name: 'Signup', Component: Signup },
+]
+  
 export default AuthNavigator;

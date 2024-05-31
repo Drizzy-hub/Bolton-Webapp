@@ -2,7 +2,7 @@ import { Input, InputGroup, InputRightElement } from '@chakra-ui/react';
 import React from 'react';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 
-const PassInput = ({placeholder, name, mb, onChange}) => {
+const PassInput = ({placeholder, value, name, mb, onChange}) => {
         const [show, setShow] = React.useState(false)
         const handleClick = () => setShow(!show)
       
@@ -10,6 +10,7 @@ const PassInput = ({placeholder, name, mb, onChange}) => {
           <InputGroup mb={mb} size='md'>
             <Input
             name={name}
+            value={value}
             onChange={onChange}
               pr='4.5rem'
               type={show ? 'text' : 'password'}

@@ -8,15 +8,16 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ChakraProvider} from '@chakra-ui/react';
 import theme from './theme';
-import { AuthenticatedUserProvider } from "./provider";
+
+
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <ChakraProvider theme={theme}>
-  <AuthenticatedUserProvider>
+
     <App />
-    </AuthenticatedUserProvider>
+   
     </ChakraProvider>
 );
 

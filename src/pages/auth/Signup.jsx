@@ -42,7 +42,7 @@ const Signup = () => {
 
       const signInUser = await signInWithEmailAndPassword(auth, inputValue.email, inputValue.password);
       setUser(signInUser.user);
-      navigate('/Home');
+      navigate('/');
       console.log("User registered successfully");
     } catch (error) {
       console.log("Error signing up user:", error);
