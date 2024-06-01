@@ -3,26 +3,23 @@ import { useContext, useEffect } from "react";
 import { AuthenticatedUserContext } from "../provider";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import { UserIcon } from "../assets";
 
 
 
 
 const Header = () => {
   const { user, setUserData, userData } = useContext(AuthenticatedUserContext);
-  
-
   useEffect(() => {
     const fetchUserData = async () => {
       if (user && user.uid) {
-        console.log(user.uid, 'id')
         try {
           const userDoc = await getDoc(doc(db, "users", user.uid));
           if (userDoc.exists()) {
             setUserData(userDoc.data());
-            console.log(userDoc, 'test~login');
+            console.log(userDoc.data(), 'test~login');
           } else {
             console.log('No such document!');
-            console.log(userDoc.data(), 'test~login');
           }
         } catch (error) {
           console.error('Error fetching user data:', error);
@@ -34,13 +31,13 @@ const Header = () => {
   }, [user, setUserData]); 
 
   return (
-    <Box>
-      <Box>
-        <Text>Hello,</Text>
-            
+    <Box flexDirection={'row'} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
+      <Box maxWidth={400}>
+        <Text fontSize={16} fontWeight={400} color={'#8696BB'}>Hello,</Text>
+        <Text fontSize={{ base: '10px', lg: '20px' }} fontWeight={700}>{userData?.name}</Text>
       </Box>
       <Box>
-    UserIcon
+    <UserIcon />
       </Box>
     </Box>
   );

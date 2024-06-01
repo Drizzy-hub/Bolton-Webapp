@@ -2,14 +2,14 @@ import { Box, Button, Input, Link, Text } from '@chakra-ui/react';
 import React, { useContext, useState } from 'react';
 import { Google, PassInput } from '../../components';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth, db} from "../../firebase";
+import { auth} from "../../firebase";
 import { useNavigate } from 'react-router-dom';
 import { AuthenticatedUserContext } from '../../provider';
-import { doc, getDoc } from '@firebase/firestore';
+
 
 const Login = () => {
   const navigate = useNavigate();
-  const { setUser, setUserData  } = useContext(AuthenticatedUserContext);
+  const { setUser  } = useContext(AuthenticatedUserContext);
   const [inputValue, setInputValue] = useState({
     password:'',
     email:'',
