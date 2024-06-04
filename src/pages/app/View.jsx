@@ -7,7 +7,11 @@ import { AuthenticatedUserContext } from '../../provider';
 const View = () => {
     const { user} = useContext(AuthenticatedUserContext);
     const [videos, setVideos] = useState([]);
-    const fetchVideos = async () => {
+    useEffect(() => {
+        fetchVideos(user);
+      }, [user]); 
+    const fetchVideos = async (user) => {
+        console.log(user, 'check')
         try {
           const storageRef = ref(storage, `video/${user.uid}`);
           const listResult = await listAll(storageRef);
@@ -21,11 +25,7 @@ const View = () => {
         } catch (error) {
           console.error("Error fetching videos:", error);
         }
-      };
-      useEffect(() => {
-        fetchVideos();
-      }, [videos]);
-    
+      };  
   return (
     <Box overflowY="scroll" maxHeight="80vh" padding="20px">
     {videos.map((videoURL, index) => (

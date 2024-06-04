@@ -60,6 +60,7 @@ const Record = () => {
       try {
         const snapshot = await uploadBytes(storageRef, blob);
         const downloadURL = await getDownloadURL(snapshot.ref);
+        console.log(downloadURL, 'downloadUrl')
         await saveVideoURLToFirestore(downloadURL);
       } catch (error) {
         console.error("Error uploading video:", error);
@@ -71,7 +72,7 @@ const Record = () => {
       try {
         await addDoc(doc(db, "posts"), {
           creator: user.uid,
-          videoURL: url,
+          recordURL: url,
           creation: serverTimestamp(),
         });
         console.log("Video URL saved to Firestore");
