@@ -17,14 +17,14 @@ const Navigator = () => {
           <Route 
             key={name} 
             path={path} 
-            element={!user ? <Component /> : <Navigate to="/" />} 
+            element={!user ? <Component /> : <Navigate to="/home" />} 
           />
         ))}
         {AppNavigator.map(({ path, Component, name }) => (
           <Route 
             key={name} 
             path={path} 
-            element={user?.accessToken ? <Component /> : <Navigate to="/login" />} 
+            element={user?.accessToken ? <Component /> : <Navigate to="/" />} 
           />
         ))}
         <Route path="*" element={<NoPage />} />
