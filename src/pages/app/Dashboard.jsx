@@ -10,8 +10,8 @@ const Home = () => {
     <Header/>
     <Tabs isFitted mt={{base:10, lg:20}} width={'100%'} position='relative' variant='unstyled'>
   <TabList>
-    <Tab>View </Tab>
     <Tab>Record </Tab>
+    <Tab>View </Tab>
   </TabList>
   <TabIndicator mt='-1.5px' height='2px' bg='blue.500' borderRadius='1px' />
   <TabPanels>

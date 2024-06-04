@@ -60,7 +60,6 @@ const Record = () => {
       try {
         const snapshot = await uploadBytes(storageRef, blob);
         const downloadURL = await getDownloadURL(snapshot.ref);
-       
         await saveVideoURLToFirestore(downloadURL);
       } catch (error) {
         console.error("Error uploading video:", error);
