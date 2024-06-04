@@ -17,7 +17,7 @@ const Header = () => {
           const userDoc = await getDoc(doc(db, "users", user.uid));
           if (userDoc.exists()) {
             setUserData(userDoc.data());
-            console.log(userDoc.data(), 'test~login');
+       
           } else {
             console.log('No such document!');
           }
