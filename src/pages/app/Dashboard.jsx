@@ -1,6 +1,8 @@
 import { Box, Tab, TabIndicator, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import React from 'react';
 import { Header } from '../../components';
+import Record from './Record';
+import View from './View';
 
 const Home = () => {
   return (
@@ -14,10 +16,10 @@ const Home = () => {
   <TabIndicator mt='-1.5px' height='2px' bg='blue.500' borderRadius='1px' />
   <TabPanels>
     <TabPanel>
-      <p>one!</p>
+      <Record/>
     </TabPanel>
     <TabPanel>
-      <p>two!</p>
+      <View/>
     </TabPanel>
   </TabPanels>
 </Tabs>
