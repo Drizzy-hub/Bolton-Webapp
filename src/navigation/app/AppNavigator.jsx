@@ -1,7 +1,7 @@
 import { Dashboard } from '../../pages/app';
 
 const AppNavigator =  [
-  { path: '/home', name: 'Home', Component: Dashboard },
+  { path: '/', name: 'Home', Component: Dashboard },
 ]
 
 
