@@ -3,12 +3,10 @@ import React, { useContext, useState } from 'react';
 import { Google, PassInput } from '../../components';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth} from "../../firebase";
-import { useNavigate } from 'react-router-dom';
 import { AuthenticatedUserContext } from '../../provider';
 
 
 const Login = () => {
-  const navigate = useNavigate();
   const { setUser  } = useContext(AuthenticatedUserContext);
   const [inputValue, setInputValue] = useState({
     password:'',
@@ -29,8 +27,10 @@ const Login = () => {
         const userCredential = await signInWithEmailAndPassword(auth, inputValue.email, inputValue.password);
         const user = userCredential.user;
         setUser(user);
-        console.log(user, 'user')
-        navigate('/');
+        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('token', JSON.stringify(user?.accessToken));
+        // console.log(user, 'user')
+        // navigate('/');
       } else {
         alert("Please fill in both fields");
       }

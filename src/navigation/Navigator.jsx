@@ -1,15 +1,13 @@
 import React, { useContext } from 'react';
-import { BrowserRouter,  Navigate,  Route, Routes} from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AuthNavigator } from './auth';
-import { AuthenticatedUserContext} from '../provider';
 import { AppNavigator } from './app';
 import { NoPage } from '../pages';
-
-
+import { AuthenticatedUserContext } from '../provider';
 
 const Navigator = () => {
   const { user } = useContext(AuthenticatedUserContext);
-  
+
   return (
     <BrowserRouter>
       <Routes>
@@ -24,7 +22,7 @@ const Navigator = () => {
           <Route 
             key={name} 
             path={path} 
-            element={user?.accessToken ? <Component /> : <Navigate to="/login" />} 
+            element={user ? <Component /> : <Navigate to="/login" />} 
           />
         ))}
         <Route path="*" element={<NoPage />} />

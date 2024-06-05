@@ -5,10 +5,9 @@ import { AuthenticatedUserContext } from '../../provider';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from '@firebase/firestore';
 import { auth, db } from "../../firebase";
-import { useNavigate } from 'react-router-dom';
+
 
 const Signup = () => {
-  const navigate = useNavigate();
   const { setUser } = useContext(AuthenticatedUserContext);
   const [inputValue, setInputValue] = useState({
     email: '',
@@ -42,7 +41,9 @@ const Signup = () => {
 
       const signInUser = await signInWithEmailAndPassword(auth, inputValue.email, inputValue.password);
       setUser(signInUser.user);
-      navigate('/');
+      localStorage.setItem('token', JSON.stringify(signInUser?.user?.accessToken));
+      localStorage.setItem('user', JSON.stringify(signInUser?.user));
+      // navigate('/');
       console.log("User registered successfully");
     } catch (error) {
       console.log("Error signing up user:", error);
