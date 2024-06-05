@@ -4,6 +4,7 @@ import { AuthenticatedUserContext } from "../provider";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { UserIcon } from "../assets";
+import { Link } from "react-router-dom";
 
 
 
@@ -37,8 +38,8 @@ const Header = () => {
         <Text fontSize={{ base: '10px', lg: '20px' }} fontWeight={700}>{userData?.name}</Text>
       </Box>
       <Box>
-    <UserIcon />
-      </Box>
+      <Link to={'/profile'}><UserIcon /></Link>
+    </Box>
     </Box>
   );
 };
