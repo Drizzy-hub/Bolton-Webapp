@@ -12,6 +12,7 @@ const View = () => {
 		if (user) {
 			fetchVideos(user);
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user]);
 
 	const fetchVideos = async (user) => {
@@ -71,7 +72,7 @@ const View = () => {
 								autoPlay
 								style={{ width: '100%', maxHeight: '400px' }}
 								preload="auto"
-								src={video.url} // Set src to video.url
+								src={video.url}
 							/>
 						</Box>
 					))}
