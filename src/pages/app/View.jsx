@@ -1,8 +1,8 @@
 import { Box, Heading } from '@chakra-ui/react';
+import { getDownloadURL, listAll, ref, getMetadata } from 'firebase/storage';
 import React, { useContext, useEffect, useState } from 'react';
-import { db } from '../../firebase';
+import { storage } from '../../firebase';
 import { AuthenticatedUserContext } from '../../provider';
-import { collection, getDocs, query, where } from '@firebase/firestore';
 
 const View = () => {
 	const { user } = useContext(AuthenticatedUserContext);
@@ -12,30 +12,21 @@ const View = () => {
 		if (user) {
 			fetchVideos(user);
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user]);
 
 	const fetchVideos = async (user) => {
+		console.log(user, 'check');
 		try {
-			// Fetch video documents from Firestore
-			const q = query(
-				collection(db, 'posts'),
-				where('creator', '==', user.uid)
-			);
-			const querySnapshot = await getDocs(q);
-			const videos = [];
-
-			querySnapshot.forEach((doc) => {
-				const data = doc.data();
-				console.log(data.creation, 'data');
-				videos.push({
-					url: data.recordURL, // Use recordURL directly as it contains the download URL
-					creation: data.creation,
-				});
-			});
-
-			// Categorize videos by creation day
-			const categorizedVideos = categorizeByDay(videos);
+			const storageRef = ref(storage, `video/${user.uid}`);
+			const listResult = await listAll(storageRef);
+			const videoUrls = [];
+			for (const itemRef of listResult.items) {
+				const downloadURL = await getDownloadURL(itemRef);
+				const metadata = await getMetadata(itemRef);
+				const creationDate = metadata.customMetadata?.creationDate;
+				videoUrls.push({ url: downloadURL, creation: creationDate });
+			}
+			const categorizedVideos = categorizeByDay(videoUrls);
 			setVideosByDay(categorizedVideos);
 		} catch (error) {
 			console.error('Error fetching videos:', error);
@@ -46,7 +37,7 @@ const View = () => {
 		const videosByDay = {};
 
 		videos.forEach((video) => {
-			const creationDate = video.creation.toDate();
+			const creationDate = new Date(video.creation);
 			const dateKey = creationDate.toDateString();
 
 			if (!videosByDay[dateKey]) {

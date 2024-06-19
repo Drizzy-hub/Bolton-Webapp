@@ -1,5 +1,5 @@
 import { Box, Text } from '@chakra-ui/react';
-import { addDoc, doc, serverTimestamp } from '@firebase/firestore';
+import { addDoc, collection, serverTimestamp } from '@firebase/firestore';
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { FaRegCircleStop } from 'react-icons/fa6';
 import { PiRecordFill } from 'react-icons/pi';
@@ -68,21 +68,26 @@ const Record = () => {
 		const storageRef = ref(storage, path);
 
 		try {
-			const snapshot = await uploadBytes(storageRef, blob);
+			const snapshot = await uploadBytes(storageRef, blob, {
+				customMetadata: {
+					creationDate: new Date().toISOString(),
+				},
+			});
 			const downloadURL = await getDownloadURL(snapshot.ref);
-			await saveVideoURLToFirestore(downloadURL);
+			await saveVideoURLToFirestore(downloadURL, new Date());
 		} catch (error) {
 			console.error('Error uploading video:', error);
 			alert('Upload failed: ' + error.message);
 		}
 	};
 
-	const saveVideoURLToFirestore = async (url) => {
+	const saveVideoURLToFirestore = async (url, creationDate) => {
 		try {
-			await addDoc(doc(db, 'posts'), {
+			await addDoc(collection(db, 'posts'), {
 				creator: user.uid,
 				recordURL: url,
 				creation: serverTimestamp(),
+				creationDate: creationDate,
 			});
 			console.log('Video URL saved to Firestore');
 		} catch (error) {
