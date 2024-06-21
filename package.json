@@ -14,6 +14,7 @@
     "firebase": "^10.12.2",
     "framer-motion": "^11.2.9",
     "react": "^18.3.1",
+    "react-calendar": "^5.0.0",
     "react-dom": "^18.3.1",
     "react-icons": "^5.2.1",
     "react-router-dom": "^6.23.1",
@@ -46,5 +47,6 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
-  }
+  },
+  "packageManager": "yarn@1.22.21+sha1.1959a18351b811cdeedbd484a8f86c3cc3bbaf72"
 }
