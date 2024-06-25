@@ -46,10 +46,14 @@ const Header = ({ profile }) => {
 					justifyContent="space-between"
 				>
 					<Box maxWidth={400}>
-						<Text fontSize={16} fontWeight={400} color="#8696BB">
+						<Text fontSize={16} fontWeight={400} color="#ffffff">
 							Hello,
 						</Text>
-						<Text fontSize={{ base: '10px', lg: '20px' }} fontWeight={700}>
+						<Text
+							color={'#ffffff'}
+							fontSize={{ base: '10px', lg: '20px' }}
+							fontWeight={700}
+						>
 							{userData?.name}
 						</Text>
 					</Box>

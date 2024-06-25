@@ -1,4 +1,12 @@
-import { Box, Button, Checkbox, Input, Link, Text } from '@chakra-ui/react';
+import {
+	Box,
+	Button,
+	Checkbox,
+	Input,
+	Link,
+	Text,
+	useToast,
+} from '@chakra-ui/react';
 import React, { useContext, useState } from 'react';
 import { PassInput } from '../../components'; // Assuming this is a custom password input component
 import { AuthenticatedUserContext } from '../../provider';
@@ -19,6 +27,7 @@ const Signup = () => {
 		confirmpassword: '',
 		researchConsent: false,
 	});
+	const toast = useToast();
 
 	const handleChange = (event) => {
 		const { name, value, type, checked } = event.target;
@@ -29,24 +38,37 @@ const Signup = () => {
 	};
 
 	const handleSignup = async () => {
+		const { email, name, phone, password, confirmpassword } = inputValue;
+
+		if (!email || !name || !phone || !password || !confirmpassword) {
+			toast({
+				title: 'Error',
+				description: 'All fields are required.',
+				status: 'error',
+				duration: 5000,
+				isClosable: true,
+			});
+			return;
+		}
+
 		try {
 			const userCredential = await createUserWithEmailAndPassword(
 				auth,
-				inputValue.email,
-				inputValue.password
+				email,
+				password
 			);
 			const user = userCredential.user;
 			await setDoc(doc(db, 'users', user.uid), {
 				id: user.uid,
-				name: inputValue.name,
-				phone: inputValue.phone,
+				name,
+				phone,
 				researchConsent: inputValue.researchConsent ? 'yes' : null,
 			});
 
 			const signInUser = await signInWithEmailAndPassword(
 				auth,
-				inputValue.email,
-				inputValue.password
+				email,
+				password
 			);
 			setUser(signInUser.user);
 			localStorage.setItem(
@@ -58,6 +80,13 @@ const Signup = () => {
 			console.log('User registered successfully');
 		} catch (error) {
 			console.log('Error signing up user:', error);
+			toast({
+				title: 'Error',
+				description: error.message,
+				status: 'error',
+				duration: 5000,
+				isClosable: true,
+			});
 		}
 	};
 

@@ -50,11 +50,21 @@ const Record = () => {
 	const [lastVideoBlob, setLastVideoBlob] = useState(null);
 	const [lastVideoURL, setLastVideoURL] = useState(''); // Store the last video URL
 	const videoRef = useRef(null);
+	const canvasRef = useRef(null); // Canvas reference for brightness analysis
 	const chunks = useRef([]);
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const {
+		isOpen: isStartRecordingOpen,
+		onOpen: onStartRecordingOpen,
+		onClose: onStartRecordingClose,
+	} = useDisclosure();
 	const [selectedFeeling, setSelectedFeeling] = useState('');
+	const [selectedpreFeeling, setSelectedpreFeeling] = useState('');
 	const handleFeelingChange = (event) => {
 		setSelectedFeeling(event.target.value);
+	};
+	const handlePreFeelingChange = (event) => {
+		setSelectedpreFeeling(event.target.value);
 	};
 
 	const handleFeelingSubmit = async () => {
@@ -84,6 +94,7 @@ const Record = () => {
 				creation: serverTimestamp(),
 				creationDate: creationDate,
 				feeling: selectedFeeling,
+				preFeeling: selectedpreFeeling,
 			});
 			console.log('Video URL saved to Firestore');
 		} catch (error) {
@@ -101,6 +112,49 @@ const Record = () => {
 		};
 		getMedia();
 	}, []);
+
+	useEffect(() => {
+		if (stream && isRecording) {
+			const canvas = canvasRef.current;
+			const video = videoRef.current;
+			const ctx = canvas.getContext('2d');
+			let requestId;
+
+			const checkBrightness = () => {
+				ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+				const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+				const brightness = calculateBrightness(imageData.data);
+				console.log('Brightness:', brightness);
+
+				if (brightness < 100) {
+					alert('Video is too dark. Move to a brighter place.');
+					stopRecording();
+				} else {
+					requestId = requestAnimationFrame(checkBrightness);
+				}
+			};
+
+			requestId = requestAnimationFrame(checkBrightness);
+
+			return () => {
+				cancelAnimationFrame(requestId);
+			};
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [stream, isRecording]);
+
+	const calculateBrightness = (data) => {
+		let brightness = 0;
+
+		for (let i = 0; i < data.length; i += 4) {
+			const r = data[i];
+			const g = data[i + 1];
+			const b = data[i + 2];
+			brightness += 0.299 * r + 0.587 * g + 0.114 * b;
+		}
+
+		return brightness / (data.length / 4);
+	};
 
 	const startRecording = () => {
 		if (stream) {
@@ -159,6 +213,7 @@ const Record = () => {
 				customMetadata: {
 					creationDate: new Date().toISOString(),
 					emotions: selectedFeeling,
+					preFeeling: selectedpreFeeling,
 				},
 			});
 			const downloadURL = await getDownloadURL(snapshot.ref);
@@ -181,6 +236,7 @@ const Record = () => {
 						muted
 						style={{ width: '100%', maxHeight: '400px' }}
 					/>
+					<canvas ref={canvasRef} style={{ display: 'none' }} />
 				</Box>
 
 				<Modal isOpen={isOpen} onClose={onClose}>
@@ -209,6 +265,32 @@ const Record = () => {
 					</ModalContent>
 				</Modal>
 
+				<Modal isOpen={isStartRecordingOpen} onClose={onStartRecordingClose}>
+					<ModalOverlay />
+					<ModalContent>
+						<ModalHeader>Start Recording</ModalHeader>
+						<ModalCloseButton />
+						<ModalBody>
+							<Select
+								placeholder="Select your feeling"
+								value={selectedpreFeeling}
+								onChange={handlePreFeelingChange}
+							>
+								{feelings.map((feeling) => (
+									<option key={feeling} value={feeling}>
+										{feeling}
+									</option>
+								))}
+							</Select>
+						</ModalBody>
+						<ModalFooter>
+							<Button onClick={startRecording} colorScheme="red" size="lg">
+								Start Recording
+							</Button>
+						</ModalFooter>
+					</ModalContent>
+				</Modal>
+
 				<Box
 					display={'flex'}
 					justifyContent={'center'}
@@ -220,7 +302,7 @@ const Record = () => {
 							<FaRegCircleStop size={50} />
 						</button>
 					) : (
-						<button onClick={startRecording}>
+						<button onClick={onStartRecordingOpen}>
 							<PiRecordFill size={50} color="red" />
 						</button>
 					)}
