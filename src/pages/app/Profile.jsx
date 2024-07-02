@@ -17,10 +17,13 @@ import { Header } from '../../components';
 const Profile = () => {
 	const { userData, user } = useContext(AuthenticatedUserContext);
 	const [formData, setFormData] = useState({
-		age: '',
+		dob: '',
+		sex: '',
 		emotionalStability: '',
 		employmentStatus: '',
 		financialWorry: '',
+		chronicConditions: '',
+		civilStatus: '',
 		incomeSatisfaction: '',
 		healthServiceSatisfaction: '',
 		laughterFrequency: '',
@@ -30,7 +33,12 @@ const Profile = () => {
 		healthStatus: '',
 		socioEconomicHealth: '',
 	});
-	const ageRanges = ['18-25', '25-40', '40-60', '70-100'];
+	const sexes = ['Male', 'Female', 'Intersex', 'Prefer not to say'];
+
+	const statuses = ['Employed: Full-time, part-time or contract', 'Self-employed: Freelancers, consultants, or business owners',
+		'Unemployed: Actively looking for work', 'Student: Full-time or part-time education', 'Retired', 'Homemaker', 'Other']
+	
+	const civilStatus = ['Divorced', 'Married' , 'Never Married', 'Separated(but still in a registered partnership)', 'Separated(but still legally married)', 'Widowed', 'Prefer not to say']
 
 	useEffect(() => {
 		const fetchUserData = async () => {
@@ -116,14 +124,23 @@ const Profile = () => {
 						value={userData?.phone}
 						placeholder={'Phone Number'}
 					/>
-					<FormLabel>Age</FormLabel>
+
+					<FormControl id="birthDate" isRequired>
+						<FormLabel>Date of Birth</FormLabel>
+						<Input
+							type="date"
+							value={formData.dob}
+							onChange={(e) => handleChange('dob',e.target.value)}
+						/>
+					</FormControl>
+					<FormLabel>Sex</FormLabel>
 					<Select
 						mb={4}
-						value={formData.age}
-						onChange={(e) => handleChange('age', e.target.value)}
-						onBlur={() => saveData('age', formData.age)}
+						value={formData.sex}
+						onChange={(e) => handleChange('sex', e.target.value)}
+						onBlur={() => saveData('sex', formData.sex)}
 					>
-						{ageRanges.map((range) => (
+						{sexes.map((range) => (
 							<option key={range} value={range}>
 								{range}
 							</option>
@@ -141,16 +158,40 @@ const Profile = () => {
 						placeholder={'Emotionally Stable'}
 					/>
 					<FormLabel>Employment Status</FormLabel>
-					<Input
+					<Select
 						mb={4}
 						value={formData.employmentStatus}
 						onChange={(e) => handleChange('employmentStatus', e.target.value)}
 						onBlur={() =>
 							saveData('employmentStatus', formData.employmentStatus)
 						}
-						label={'What is your current employment Status?'}
-						placeholder={'What is your current employment Status'}
-					/>
+					>
+						{statuses.map((range) => (
+							<option key={range} value={range}>
+								{range}
+							</option>
+						))}
+						
+					</Select>
+					
+					<FormLabel>Civil Status</FormLabel>
+					<Select
+						mb={4}
+						value={formData.civilStatus}
+						onChange={(e) => handleChange('civilStatus', e.target.value)}
+						onBlur={() =>
+							saveData('civilStatus', formData.employmentStatus)
+						}
+					>
+						{civilStatus.map((range) => (
+							<option key={range} value={range}>
+								{range}
+							</option>
+						))}
+
+					</Select>
+					
+					
 					<FormLabel>Financial Worry</FormLabel>
 					<Input
 						mb={4}
@@ -177,6 +218,21 @@ const Profile = () => {
 							'How satisfied are you with your current level of income?'
 						}
 					/>
+
+					<FormLabel>Chronic Conditions ( Yes or No, and condition-optional)</FormLabel>
+					<Input
+						mb={4}
+						value={formData.chronicConditions}
+						onChange={(e) => handleChange('chronicConditions', e.target.value)}
+						onBlur={() =>
+							saveData('chronicConditions', formData.chronicConditions)
+						}
+						//label={'How satisfied are you with your current level of income?'}
+						placeholder={
+							'Do you have any chronic conditions?, if yes, do you mind sharing?'
+						}
+					/>
+
 					<FormLabel>Health Service Satisfaction</FormLabel>
 					<Input
 						mb={4}

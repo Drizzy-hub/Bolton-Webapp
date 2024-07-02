@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import axios from 'axios';
 import {
 	Box,
 	Button,
@@ -32,11 +33,20 @@ const Reminders = () => {
 	const [reminders, setReminders] = useState([]);
 	const toast = useToast();
 
+
+	const dataToBeSent = {
+		to: "adeyeriomotola1@gmail.com",
+		subject: `LAUGHIE Reminder 😅`,
+		date: reminderDate,
+		time: reminderTime,
+	}
+
 	useEffect(() => {
 		fetchReminders();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
+	
 	const fetchReminders = async () => {
 		try {
 			const remindersRef = collection(
@@ -80,6 +90,8 @@ const Reminders = () => {
 				createdBy: user.uid,
 				createdAt: serverTimestamp(),
 			});
+
+			await axios.post('https://bolton-webapp-be.vercel.app/email/send', dataToBeSent)
 
 			toast({
 				title: 'Reminder set',

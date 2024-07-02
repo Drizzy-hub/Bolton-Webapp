@@ -55,8 +55,13 @@ const Header = ({ profile }) => {
 							fontWeight={700}
 						>
 							{userData?.name}
-						</Text>
-					</Box>
+							</Text>
+						</Box>
+						<Box>
+							<Link to="/about">
+								<Text fontSize={16} color={"#fff"} fontWeight={400}>How to use</Text>
+							</Link>
+						</Box>
 					<Box>
 						<Link to="/profile">
 							<UserIcon />
