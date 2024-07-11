@@ -104,7 +104,10 @@ const Record = () => {
 
 	useEffect(() => {
 		const getMedia = async () => {
-			const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+			const stream = await navigator.mediaDevices.getUserMedia({
+				video: true,
+				audio: true,
+			});
 			setStream(stream);
 			if (videoRef.current) {
 				videoRef.current.srcObject = stream;
@@ -158,13 +161,15 @@ const Record = () => {
 
 	const startRecording = () => {
 		if (stream) {
-			const mediaRecorder = new MediaRecorder(stream);
+			const mediaRecorder = new MediaRecorder(stream, {
+				mimeType: 'video/webm;codecs=vp9,opus',
+			});
 			mediaRecorderRef.current = mediaRecorder;
 			mediaRecorder.ondataavailable = (event) => {
 				chunks.current.push(event.data);
 			};
 			mediaRecorder.onstop = async () => {
-				const blob = new Blob(chunks.current, { type: 'video/mp4' });
+				const blob = new Blob(chunks.current, { type: 'video/webm' });
 				chunks.current = [];
 				const videoLength = 60 - capturedCountdown; // Calculate the length of the video
 				console.log(videoLength, 'length');
